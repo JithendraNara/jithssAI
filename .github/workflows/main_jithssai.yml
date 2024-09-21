@@ -1,4 +1,4 @@
-name: Build and Deploy to Azure Web App - JithssAI
+name: Build and Deploy to Azure Web App
 
 on:
   push:
@@ -33,13 +33,13 @@ jobs:
         run: zip -r release.zip ./*
 
       - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: python-app
           path: release.zip
 
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: python-app
 
