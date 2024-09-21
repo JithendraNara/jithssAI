@@ -1,35 +1,68 @@
-name: Build and Deploy to Azure Web App
+name: Build and Deploy to Azure Web App - JithssAI
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'  # Update to Python 3.9
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'  # Ensure Python 3.9 is used
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        
+      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
-    - name: Archive production artifacts
-      run: zip -r myapp.zip .
+      - name: Zip artifact for deployment
+        run: zip -r release.zip ./*
 
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'JithssAI'  # Replace with your Azure Web App name
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: './myapp.zip'
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-app
+          path: release.zip
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_613AE57065484FBEBBF80ED4200AEFE8 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5EFDA9F8155047059BDB95AE3009FB99 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCDC9CD0ECD54CBDAE4C886779C69F3E }}
+
+      - name: Stop Azure Web App
+        run: az webapp stop --name JithssAI --resource-group <your-resource-group>
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        with:
+          app-name: 'JithssAI'
+          slot-name: 'Production'
+          package: release.zip
+
+      - name: Start Azure Web App
+        run: az webapp start --name JithssAI --resource-group <your-resource-group>
