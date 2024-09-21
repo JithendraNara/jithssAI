@@ -58,7 +58,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCDC9CD0ECD54CBDAE4C886779C69F3E }}
 
       - name: Stop Azure Web App
-        run: az webapp stop --name JithssAI --resource-group <your-resource-group>
+        run: az webapp stop --name JithssAI --resource-group <myResourceGroup>
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
@@ -69,4 +69,4 @@ jobs:
           package: release.zip
 
       - name: Start Azure Web App
-        run: az webapp start --name JithssAI --resource-group <your-resource-group>
+        run: az webapp start --name JithssAI --resource-group <myResourceGroup>
