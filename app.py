@@ -8,7 +8,9 @@ app = Flask(__name__)
 # Set API keys from environment variables
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 openai.api_key = os.environ["OPENAI_API_KEY"]
-
+@app.route('/health')
+def health_check():
+    return 'Healthy', 200
 @app.route('/', methods=['GET', 'POST'])
 def index():
     generated_text = None
