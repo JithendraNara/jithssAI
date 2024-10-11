@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 # Set API key from environment variables
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
-# my API key= AIzaSyD3ztYVm5VpHO9laKb3bBvdAQ1mCHGLolo
 # Configure the SQLAlchemy part of the app instance
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
