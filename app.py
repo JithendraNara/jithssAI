@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Create the SQLAlchemy db instance
 db = SQLAlchemy(app)
-
+#just a comment
 # Define a User model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
