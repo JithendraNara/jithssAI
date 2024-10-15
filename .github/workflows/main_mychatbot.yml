@@ -31,8 +31,6 @@ jobs:
       - name: Set environment variables
         run: |
           echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> $GITHUB_ENV
-          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
-
       - name: Create and start virtual environment
         run: |
           python -m venv venv
