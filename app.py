@@ -55,10 +55,7 @@ def index():
         try:
             model = genai.GenerativeModel("gemini-1.5-flash")
             response = model.generate_content(user_input)
-            generated_text = ""
-            for candidate in response.candidates:
-                for part in candidate.content.parts:
-                    generated_text += part.text + "\n"
+            generated_text = response.content
         except Exception as e:
             error_message = str(e)
         
